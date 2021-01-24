@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,10 +22,14 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
 @RequestMapping("api/v1/employees")
 @RestController
+@RefreshScope
 public class EmployeeController {
 
 	@Autowired
 	EmployeeService employeeService;
+	
+	@Value("${country}")
+	private String country;
     
 	@Operation(description = "Returns all the employees")
 	@GetMapping("/")
@@ -77,5 +83,10 @@ public class EmployeeController {
 		return new ResponseEntity(headers, HttpStatus.OK);
 		
 		
+	}
+	
+	@GetMapping("/dynamicCountry")
+	public String getCountry() {
+		return country;
 	}
 }
